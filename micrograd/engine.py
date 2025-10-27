@@ -2,13 +2,15 @@
 class Value:
     """ stores a single scalar value and its gradient """
 
-    def __init__(self, data, _children=(), _op=''):
+    def __init__(self, data, _children=(), _op='', label='', color=None):
         self.data = data
         self.grad = 0
         # internal variables used for autograd graph construction
         self._backward = lambda: None
         self._prev = set(_children)
         self._op = _op # the op that produced this node, for graphviz / debugging / etc
+        self.label = label
+        self.color = color
 
     def __add__(self, other):
         other = other if isinstance(other, Value) else Value(other)
@@ -34,7 +36,7 @@ class Value:
 
     def __pow__(self, other):
         assert isinstance(other, (int, float)), "only supporting int/float powers for now"
-        out = Value(self.data**other, (self,), f'**{other}')
+        out = Value(self.data**other, (self,), f'^{other}')
 
         def _backward():
             self.grad += (other * self.data**(other-1)) * out.grad
