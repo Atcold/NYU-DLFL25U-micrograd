@@ -25,7 +25,7 @@ class Value:
 
     def __mul__(self, other):
         other = other if isinstance(other, Value) else Value(other)
-        out = Value(self.data * other.data, (self, other), '*')
+        out = Value(self.data * other.data, (self, other), '×')
 
         def _backward():
             self.grad += other.data * out.grad
@@ -45,7 +45,7 @@ class Value:
         return out
 
     def relu(self):
-        out = Value(0 if self.data < 0 else self.data, (self,), 'ReLU')
+        out = Value(0 if self.data < 0 else self.data, (self,), '(⋅)⁺')
 
         def _backward():
             self.grad += (out.data > 0) * out.grad
